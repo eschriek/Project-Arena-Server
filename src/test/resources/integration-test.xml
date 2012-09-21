@@ -20,19 +20,32 @@
 		<property name="password" value="" />
 	</bean>
 	
-	<bean id="sessionFactory"
+	<bean id="arenaSessionFactory"
 		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean"
 		destroy-method="destroy">
 		<property name="configurationClass" value="org.hibernate.cfg.AnnotationConfiguration" />
 
-		<property name="packagesToScan" value="nl.kennisnet.arena.model.**" />
+		<property name="annotatedClasses">
+			<list>
+				<value>nl.kennisnet.arena.model.Positionable</value>
+			</list>
+		</property>
 
+		<property name="packagesToScan">
+			<list>
+				<value>nl.kennisnet.arena.model.**</value>
+			</list>
+		</property>
+		<property name="annotatedPackages">
+			<list>
+				<value>nl.kennisnet.arena.model</value>
+			</list>
+		</property>
 		<property name="dataSource" ref="dataSource" />
 
 		<property name="hibernateProperties">
 			<props>
 				<prop key="hibernate.dialect">org.hibernatespatial.geodb.GeoDBDialect</prop>
-				<!--prop key="hibernate.dialect">org.hibernatespatial.postgis.PostgisDialect</prop-->
 				<prop key="hibernate.hbm2ddl.auto">create</prop>
 				<prop key="hibernate.show_sql">true</prop>
 				<prop key="hibernate.cache.use_second_level_cache">false</prop>

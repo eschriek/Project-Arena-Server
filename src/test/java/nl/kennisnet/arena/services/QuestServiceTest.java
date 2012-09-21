@@ -1,19 +1,20 @@
 package nl.kennisnet.arena.services;
 
+import geodb.GeoDB;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.sql.DataSource;
 
 import nl.kennisnet.arena.client.domain.QuestDTO;
 import nl.kennisnet.arena.client.domain.QuestItemDTO;
 import nl.kennisnet.arena.client.domain.RoundDTO;
 import nl.kennisnet.arena.client.domain.SimplePoint;
-import nl.kennisnet.arena.model.Round;
 
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,29 +24,25 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {  "classpath:/configuration.xml", "classpath:/integration.xml", "classpath:/services.xml", "classpath:arena-servlet-test.xml" })
+@ContextConfiguration(locations = {  "classpath:/configuration.xml", "classpath:/integration.xml","classpath:/integration-test.xml", "classpath:/services.xml", "classpath:arena-servlet-test.xml" })
 @Transactional
 public class QuestServiceTest {
     
     @Autowired
-    QuestService questService;
-
-    Long existingId;
-    QuestDTO existingQuest;
-    String existingName = "test-existing";
-    String existingEmail = "kns.arena.tester@gmail.com";
-    RoundDTO existingRound = new RoundDTO("test-round");
+    private QuestService questService;
     
-    @BeforeClass
-    public static void setUpBeforeClass() throws Exception {
-    }
+    @Autowired
+    private DataSource dataSource;
 
-    @AfterClass
-    public static void tearDownAfterClass() throws Exception {
-    }
-
+    private Long existingId;
+    private QuestDTO existingQuest;
+    private String existingName = "test-existing";
+    private String existingEmail = "kns.arena.tester@gmail.com";
+    private RoundDTO existingRound = new RoundDTO("test-round");
+    
     @Before
     public void setUp() throws Exception {
+    	GeoDB.InitGeoDB(dataSource.getConnection());
         QuestDTO questDTO = new QuestDTO();
         questDTO.setName(existingName);
         questDTO.setEmailOwner(existingEmail);
