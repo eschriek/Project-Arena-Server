@@ -1,6 +1,6 @@
 package nl.kennisnet.arena.client.panel;
 
-import nl.kennisnet.arena.client.dialog.DialogSelector;
+import nl.kennisnet.arena.client.dialog.MainDialog;
 import nl.kennisnet.arena.client.domain.QuestDTO;
 import nl.kennisnet.arena.client.domain.QuestItemDTO;
 import nl.kennisnet.arena.client.domain.QuestState;
@@ -49,9 +49,8 @@ public class MapPanel extends AbstractMapPanel implements WallToggleEvent.Handle
 
    private void createQuestItem(LatLng point) {
       String selectedItemType = QuestState.getInstance().getSelectedQuestType();
-      if (selectedItemType != null) {
-
-    	  System.out.println(selectedItemType);
+      
+    	 System.out.println(selectedItemType);
          QuestItemDTO itemDTO = new QuestItemDTO(selectedItemType + " " + QuestState.getInstance().getNumber(selectedItemType),
                selectedItemType);
 
@@ -69,13 +68,15 @@ public class MapPanel extends AbstractMapPanel implements WallToggleEvent.Handle
 
          eventQI.setQuestItem(itemDTO);
          
-         DialogSelector.showRelevantDialog(selectedItemType, itemDTO, false,true);
+         new MainDialog(itemDTO, false, true).center();
+         //new MainDialog(itemDTO, false, true);
+//         DialogSelector.showRelevantDialog(selectedItemType, itemDTO, false,true);
 
          EventBus.get().fireEvent(eventQI);
 
          refresh();
       }
-   }
+   
 
    protected void refresh() {
 	  clearMap();

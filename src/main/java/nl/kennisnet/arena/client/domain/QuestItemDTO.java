@@ -1,9 +1,11 @@
 package nl.kennisnet.arena.client.domain;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Vector;
+
+import nl.kennisnet.arena.model.Type;
+
 
 public class QuestItemDTO implements Serializable {
 
@@ -34,6 +36,7 @@ public class QuestItemDTO implements Serializable {
 	private Long id;
 	private Float schaal;
 	private Integer blended;
+	private List<Type> items;
 	private Float[] rotation;
 
 	public Long getId() {
@@ -52,6 +55,7 @@ public class QuestItemDTO implements Serializable {
 		super();
 		this.name = name;
 		this.typeName = typeName;
+		this.items = new LinkedList<Type>();
 	}
 
 	public String getName() {
@@ -214,6 +218,14 @@ public class QuestItemDTO implements Serializable {
 
 	public void setRotation(Float[] rotation) {
 		this.rotation = rotation;
+	}
+
+	public List<Type> getItems() {
+		return items;
+	}
+
+	public void setItems(List<Type> items) {
+		this.items = items;
 	}
 
 	@Override
@@ -380,5 +392,6 @@ public class QuestItemDTO implements Serializable {
 		}
 		return true;
 	}
+
 
 }

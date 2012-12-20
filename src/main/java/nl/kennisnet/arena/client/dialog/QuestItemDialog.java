@@ -30,7 +30,7 @@ public class QuestItemDialog extends DialogBox {
    private TextBox nameTextBox = new TextBox();
    private TextBox radiusTextBox = new TextBox();
    private TextBox visibleRadiusTexBox = new TextBox(); 
-   private QuestItemDTO itemDTO;
+   private QuestItemDTO container;
    private final boolean readOnlyDialog;
    private final boolean create;
 
@@ -40,7 +40,7 @@ public class QuestItemDialog extends DialogBox {
       this.create = create;
       EventBus.get().fireEvent(
             new LogEvent("Dialog is called with :" + readOnlyDialog + " and opened readonly :" + this.readOnlyDialog));
-      this.itemDTO = itemDTO;
+      this.container = itemDTO;
       setWidget(createPanel(itemDTO));
       fillFormFromItem(itemDTO);
       nameTextBox.setFocus(true);
@@ -72,7 +72,7 @@ public class QuestItemDialog extends DialogBox {
 
             @Override
             public void onClick(ClickEvent event) {
-               fillItemFromForm(itemDTO);
+               fillItemFromForm(container);
                EventBus.get().fireEvent(new UpdateQuestItemEvent());
                hide();
             }
@@ -91,7 +91,7 @@ public class QuestItemDialog extends DialogBox {
          @Override
          public void onClick(ClickEvent event) {
             if (create){
-               QuestState.getInstance().getState().removeItem(itemDTO);
+               QuestState.getInstance().getState().removeItem(container);
                EventBus.get().fireEvent(new RefreshQuestEvent());
             }
             hide();
@@ -152,7 +152,7 @@ public class QuestItemDialog extends DialogBox {
    }
 
    public QuestItemDTO getQuestItemDTO() {
-      return itemDTO;
+      return container;
    }
 
    public boolean isReadOnly() {

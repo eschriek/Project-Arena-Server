@@ -8,6 +8,7 @@ import nl.kennisnet.arena.client.domain.QuestDTO;
 import nl.kennisnet.arena.client.domain.QuestItemDTO;
 import nl.kennisnet.arena.client.domain.RoundDTO;
 import nl.kennisnet.arena.client.domain.TeamDTO;
+import nl.kennisnet.arena.model.Combined;
 import nl.kennisnet.arena.model.Image;
 import nl.kennisnet.arena.model.Information;
 import nl.kennisnet.arena.model.Object3D;
@@ -78,7 +79,12 @@ public class DTOFactory {
 				result.setSchaal(object3d.getSchaal());
 				result.setBlended(object3d.isBlended() ? 1 : 0);
 				result.setRotation(object3d.getRotation());
+			} else if (positionable instanceof Combined) {
+				Combined combined = (Combined) positionable;
+				result = new QuestItemDTO(combined.getName(), "Combined");
+				result.setItems(combined.getItems());
 			}
+			
 			if (result != null) {
 				result.setRadius(positionable.getLocation().getRadius());
 				result.setVisibleRadius(positionable.getLocation()

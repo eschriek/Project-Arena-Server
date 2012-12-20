@@ -1,6 +1,6 @@
 package nl.kennisnet.arena.client.widget;
 
-import nl.kennisnet.arena.client.dialog.DialogSelector;
+import nl.kennisnet.arena.client.dialog.MainDialog;
 import nl.kennisnet.arena.client.domain.QuestItemDTO;
 import nl.kennisnet.arena.client.domain.QuestItemTypes;
 import nl.kennisnet.arena.client.domain.SimplePoint;
@@ -51,7 +51,8 @@ public class QuestItemMarker {
 		
 		@Override
 		public void handle(MouseEvent event) {
-			 DialogSelector.showRelevantDialog(item.getTypeName(), item, readonly,false);
+			new MainDialog(item, readonly, false);
+			// DialogSelector.showRelevantDialog(item.getTypeName(), item, readonly,false);
 			
 		}
 	});

@@ -15,6 +15,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
@@ -55,6 +56,7 @@ public class QuestDetailsPanel extends SidePanel implements
 		questNameBox = new TextBox();
 		formPanel.addField(new Label("naam"), questNameBox);
 		formPanel.addField(new Label("email"), designerBox);
+		formPanel.addField(new Label("omheining"), new CheckBox("Toggle"));
 	}
 
 	private void refreshValues() {

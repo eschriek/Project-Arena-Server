@@ -6,6 +6,7 @@ import java.util.List;
 import nl.kennisnet.arena.client.domain.QuestDTO;
 import nl.kennisnet.arena.client.domain.QuestItemDTO;
 import nl.kennisnet.arena.client.domain.RoundDTO;
+import nl.kennisnet.arena.model.Combined;
 import nl.kennisnet.arena.model.Image;
 import nl.kennisnet.arena.model.Information;
 import nl.kennisnet.arena.model.Location;
@@ -17,7 +18,7 @@ import nl.kennisnet.arena.model.Round;
 import nl.kennisnet.arena.model.Video;
 
 public class DomainObjectFactory {
-	
+
 	public static Quest create(QuestDTO questDTO) {
 		Quest result = new Quest();
 		// result.setId(questDTO.getId());
@@ -72,7 +73,11 @@ public class DomainObjectFactory {
 			((Object3D) result).setSchaal(questItemDTO.getSchaal());
 			((Object3D) result).setRotation(questItemDTO.getRotation());
 
+		} else if (questItemDTO.getTypeName().equalsIgnoreCase("combined")) {
+			result = new Combined();
+			((Combined) result).setItems(questItemDTO.getItems());
 		}
+
 		if (result != null) {
 			result.setName(questItemDTO.getName());
 			Location location = new Location(
@@ -84,8 +89,9 @@ public class DomainObjectFactory {
 		result.setQuest(quest);
 		return result;
 	}
-	
-	private static List<Positionable> positionablesToDelete(List<Positionable> posList, List<QuestItemDTO> itemDTOList) {
+
+	private static List<Positionable> positionablesToDelete(
+			List<Positionable> posList, List<QuestItemDTO> itemDTOList) {
 		List<Positionable> removeList = new ArrayList<Positionable>();
 		for (Positionable pos : posList) {
 			boolean exist = false;
@@ -100,19 +106,21 @@ public class DomainObjectFactory {
 		}
 		return removeList;
 	}
-	
+
 	public static Quest update(QuestDTO questDTO, Quest originalQuest) {
 		Quest quest = originalQuest;
 		quest.setName(questDTO.getName());
-		
-		for (Positionable pos : positionablesToDelete(quest.getPositionables(), questDTO.getItems())) {
+
+		for (Positionable pos : positionablesToDelete(quest.getPositionables(),
+				questDTO.getItems())) {
 			quest.getPositionables().remove(pos);
 		}
-		
+
 		if (questDTO.getItems() != null) {
 			for (QuestItemDTO questItemDTO : questDTO.getItems()) {
 				if (questItemDTO.getId() != null) {
-					System.out.println(">>>>>>>>>>>>>>>>>>> DTO ID: " + questItemDTO.getId());
+					System.out.println(">>>>>>>>>>>>>>>>>>> DTO ID: "
+							+ questItemDTO.getId());
 					for (Positionable found : quest.getPositionables()) {
 						System.out.println("FOUND ID: " + found.getId());
 						if (found.getId().equals(questItemDTO.getId())) {
@@ -127,7 +135,7 @@ public class DomainObjectFactory {
 				}
 			}
 		}
-		
+
 		quest.setBorder(GeomUtil.createJTSPolygon(questDTO.getBorder()));
 		RoundDTO activeRoundDTO = questDTO.getActiveRound();
 		if (activeRoundDTO != null) {
@@ -139,34 +147,39 @@ public class DomainObjectFactory {
 			Round r = new Round(round.getId(), round.getName(), quest);
 			quest.addRound(r);
 		}
-		
+
 		return quest;
 	}
-	
-	private static void updatePositionable(Positionable positionable, QuestItemDTO questItemDTO) {
+
+	private static void updatePositionable(Positionable positionable,
+			QuestItemDTO questItemDTO) {
 		if (positionable instanceof Information) {
 			((Information) positionable).setName(questItemDTO.getName());
-			((Information) positionable).setText((questItemDTO.getDescription()));
+			((Information) positionable)
+					.setText((questItemDTO.getDescription()));
 		} else if (positionable instanceof Question) {
 			((Question) positionable).setText(questItemDTO.getDescription());
 			((Question) positionable).setAnswer1(questItemDTO.getOption1());
 			((Question) positionable).setAnswer2(questItemDTO.getOption2());
 			((Question) positionable).setAnswer3(questItemDTO.getOption3());
 			((Question) positionable).setAnswer4(questItemDTO.getOption4());
-			((Question) positionable).setQuestionType((questItemDTO.getQuestionType()));
-			((Question) positionable).setCorrectAnswer(questItemDTO.getCorrectOption());
+			((Question) positionable).setQuestionType((questItemDTO
+					.getQuestionType()));
+			((Question) positionable).setCorrectAnswer(questItemDTO
+					.getCorrectOption());
 		} else if (positionable instanceof Image) {
 			((Image) positionable).setUrl(questItemDTO.getObjectURL());
 		} else if (positionable instanceof Video) {
 			((Video) positionable).setVideoUrl(questItemDTO.getObjectURL());
 		} else if (positionable instanceof Object3D) {
 			((Object3D) positionable).setUrl(questItemDTO.getObjectURL());
+		} else if (positionable instanceof Combined) {
+			((Combined) positionable).setItems(questItemDTO.getItems());
 		}
-		
+
 		positionable.setName(questItemDTO.getName());
-		Location location = new Location(
-				GeomUtil.createJTSPoint(questItemDTO.getPoint()),
-				questItemDTO.getAlt(), questItemDTO.getRadius(),
+		Location location = new Location(GeomUtil.createJTSPoint(questItemDTO
+				.getPoint()), questItemDTO.getAlt(), questItemDTO.getRadius(),
 				questItemDTO.getVisibleRadius());
 		positionable.setLocation(location);
 	}
